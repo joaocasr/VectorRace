@@ -94,7 +94,19 @@ class Grafo:
     
     #def devolvePrimeiraParede(self,posix,posiy,posfx,posfy):
 
-    #def calcularCustoTotal(path)
+    def calcularCustoTotal(self, path):
+        test = path
+        custo = 0
+        i = 0
+        while (i+1 < len(test)):
+            if (path[i].get_tipo().__eq__("P")):
+                custo += 25
+            else:
+                custo += 1
+        return custo
+
+
+
 
     def calculaHeuristica_Manhataan(self,nodo):
         x = nodo.get_x()
