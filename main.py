@@ -65,17 +65,17 @@ def main():
             if(x=='-'):
                 p = Peca("vazio("+str(countLine)+","+str(countColumn)+")",countLine,countColumn,"NONE")
             if(x=='F'):
-                p = Peca("meta("+str(countLine)+","+str(countColumn)+")",countLine,countColumn,"FINAL")        
+                p = Peca("meta("+str(countLine)+","+str(countColumn)+")",countLine,countColumn,"META")        
             if(x=='P'):
                 p = Peca("vazio("+str(countLine)+","+str(countColumn)+")",countLine,countColumn,"None")
-                player = Player("player1",countLine,countColumn,0,0,0,0)
+                player = Player("player1",countLine,countColumn,0,0)
             allPieces.append(p)
             countColumn +=1
         countLine +=1
         countColumn=1
     #for p in allPieces:
     #    print(p.get_nome())
-    g = Grafo(allPieces)
+    g = Grafo(allPieces,x,y,player)
     for piece in allPieces:
         g.constroiGrafo(g.devolvePecabyNome(piece))
 
