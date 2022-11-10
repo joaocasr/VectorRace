@@ -2,17 +2,17 @@ from Player import Player
 
 class Simulation:
 
-    def move(x,y,vx,vy,direction): #direction = (ax,ay)
-        vx1= vx+direction[0]
-        vy1= vy+direction[1]
+    def move(x,y,vx,vy,aceleracao): #direction = (ax,ay)
+        vx1= vx+aceleracao[0]
+        vy1= vy+aceleracao[1]
         #possivel posição para uma dada direcao
         px1 = x+vx1 
         py1 = y+vy1
         return (px1,py1,vx1,vy1) #devolve estado do jogador
 
-    def move_back(x,y,vx,vy,direction):
-        vx1= vx-direction[0]
-        vy1= vy-direction[1]
+    def move_back(x,y,vx,vy,aceleracao):
+        vx1= vx-aceleracao[0]
+        vy1= vy-aceleracao[1]
         #possivel posição para uma dada direcao
         px1 = x-vx1 
         py1 = y-vy1
@@ -32,8 +32,8 @@ for ax in [1,-1,0]:
         for (ax,ay) in allAceleracoes:
             nextvx = player.get_velocX()+ax
             nextvy = player.get_velocY()+ay
-            nextX = nextvx +ax
-            nextY = nextvy +ay
+            nextX = player.get_posx()+player.get_velocX() +ax
+            nextY = player.get_posy() +player.get_velocY()+ ay
 
             #garantir que o jogador nao sai do circuito
             if(nextX > sizeX or nextX<=0):

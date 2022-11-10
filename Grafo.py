@@ -90,6 +90,11 @@ class Grafo:
        #caso de paragem quando chegar a um dos goals F
        # fazer metodo de contagem total do custo
        
+    #def verificaCaminho(self,posix,posiy,posfx,posfy):
+    
+    #def devolvePrimeiraParede(self,posix,posiy,posfx,posfy):
+
+    #def calcularCustoTotal(path)
 
     def calculaHeuristica_Manhataan(self,nodo):
         x = nodo.get_x()
