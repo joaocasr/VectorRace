@@ -1,4 +1,5 @@
 from Simulation import Simulation
+from queue import Queue
 
 
 class Grafo:
@@ -29,6 +30,13 @@ class Grafo:
             if(peca.get_nome().__eq__(node.get_nome())):
                  return peca
         return None
+
+    #Usada em PrimeiraParede
+    def devolveByNome(self,nome):
+        for peca in self.nodos:
+            if (peca.get_nome().__eq__(nome)):
+                return peca
+        return None    
 
     def devolveGoals(self):
         goals= list()
@@ -90,9 +98,75 @@ class Grafo:
        #caso de paragem quando chegar a um dos goals F
        # fazer metodo de contagem total do custo
        
-    #def verificaCaminho(self,posix,posiy,posfx,posfy):
+    def verificaCaminho(self,posix,posiy,posfx,posfy):
+        visited = set()
+        fila = Queue()
+
+        # converte para string
+        start = self.devolveNome(posix, posiy)
+        end = self.devolveNome(posfx, posfy)
+
+        # adicionar o nodo inicial à fila e aos visitados
+        fila.put(start)
+        visited.add(start)
+
+        # garantir que o start node nao tem pais
+        parent = dict()
+        parent[start] = None
+
+        path_found = False
+
+        while not fila.empty() and path_found == False:
+            nodo_atual = fila.get()
+            if nodo_atual == end:
+                path_found = True
+            else:
+                for (n, custo) in self.grafo[nodo_atual]:
+                    if n not in visited and not n.startswith('parede'):
+                        fila.put(n)
+                        parent[n] = nodo_atual
+                        visited.add(n)
+
+
+        if path_found:
+            return(1)
+        else:
+            return(0)
+
     
-    #def devolvePrimeiraParede(self,posix,posiy,posfx,posfy):
+    def devolvePrimeiraParede(self,posix,posiy,posfx,posfy):
+        visited = set()
+        fila = Queue()
+
+        start = self.devolveNome(posix, posiy)
+        end = self.devolveNome(posfx, posfy)
+
+        # adicionar o nodo inicial à fila e aos visitados
+        fila.put(start)
+        visited.add(start)
+
+        # garantir que o start node nao tem pais...
+        parent = dict()
+        parent[start] = None
+
+        path_found = False
+
+        while not fila.empty() and path_found == False:
+            nodo_atual = fila.get()
+            if nodo_atual == end:
+                path_found = True
+            else:
+                for (n, custo) in self.grafo[nodo_atual]:
+                    if n not in visited:
+                        if n.startswith('parede'):
+                            peca = self.devolveByNome(n)
+                            return (peca)
+                        else:
+                            fila.put(n)
+                            parent[n] = nodo_atual
+                            visited.add(n)
+
+        return None
 
     def calcularCustoTotal(self, path):
         test = path
