@@ -9,7 +9,7 @@ class Peca:
     def get_y(self):
         return self.y
     def get_tipo(self):
-        return self.tipo
+        return self.type
     def get_nome(self):
         return self.nome    
     def __str__(self):

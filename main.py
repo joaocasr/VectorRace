@@ -4,62 +4,19 @@ from Peca import Peca
 from Player import Player
 
 def main():
-    y = input("Digita o comprimento do mapa:")
-    x = input("Digita a largura do mapa:")
-    metax = int(x)/2
-    metay = int(y)
-    estadox = input("Digite a posição x inicial:")
-    estadoy = input("Digite a posição y inicial:")
-    nobs=3
-    i=1
-    j=1
-    lineMap=""
-    mapLines=list()
-    while(j<=int(x)):
-        while(i<=int(y)):
-            if(j==1):
-                lineMap+="X"
-            elif(nobs<3 and i==(int(y)//2)):
-                    lineMap+="X"
-                    nobs+=1
-            elif(j==int(estadox) and i==int(estadoy)):
-                lineMap+="P"
-            elif(j==int(metax)-1 and i==int(metay)):
-                lineMap+="F"
-            elif(j==int(metax) and i==int(metay)):
-                lineMap+="F"
-            elif(j==int(metax)+1 and i==int(metay)):
-                lineMap+="F"
-            elif(i==1):
-                lineMap+="X"
-            elif(i==int(y)):
-                lineMap+="X"    
-            elif(j==int(x)):
-                lineMap+="X"
-            else:
-                lineMap+="-"
-            i+=1
-        if(j==(int(x)//2)):
-            nobs=0
-        if(j==(int(x)//4)):
-            nobs=0
-        mapLines.append(lineMap)
-        lineMap=""
-        j+=1
-        i=1
-
-    with open('map.txt', 'w') as filename:
-        for line in mapLines:
-            filename.write(line+"\n")
-    f = open("/home/joao/IA22-23/map.txt","r")
+    f = open("/home/joao/IA22-23/map5.txt","r")
     l = list()
     allPieces = list()
     countLine =1
     countColumn = 1
+    coordX=1
+    coordY=1
     for linha in f:
         l.append(linha)
     for linha in l:
+        coordX+=1
         for x in linha:
+            coordY+=1
             if(x=='X'):
                 p = Peca("parede("+str(countLine)+","+str(countColumn)+")",countLine,countColumn,"WALL")
             if(x=='-'):
@@ -75,15 +32,19 @@ def main():
         countColumn=1
     #for p in allPieces:
     #    print(p.get_nome())
-    g = Grafo(allPieces,x,y,player)
+    g = Grafo(allPieces,coordX,coordY)
     for piece in allPieces:
         g.constroiGrafo(g.devolvePecabyNome(piece))
+    vis=list()
+    path=list()
+    print(str("posição inicial do carro: ")+str((player.get_posx(),player.get_posy())))
+    print(g.GreedyAlgorithm(player,vis,path))
 
-    for key in g.grafo.keys():
-        print(str(key)+str("->"),end=' ')
-        for (n,custo) in g.grafo[key]:
-             print((n,custo),end=' ')
-        print("\n")
+    #for key in g.grafo.keys():
+    #    print(str(key)+str("->"),end=' ')
+    #    for (n,custo) in g.grafo[key]:
+    #         print((n,custo),end=' ')
+    #    print("\n")
 
 
 

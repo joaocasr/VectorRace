@@ -1,14 +1,13 @@
 from Simulation import Simulation
 from queue import Queue
-
+from datetime import datetime
 
 class Grafo:
-    def __init__(self, nodos,mapx,mapy,player,oriented = False):
+    def __init__(self, nodos,mapx,mapy,oriented = False):
         self.oriented = oriented
         self.nodos = nodos
         self.mapSizeX = mapx
         self.mapSizeY = mapy
-        self.car = player
         self.visitados = []
         self.grafo = {}
     
@@ -50,6 +49,19 @@ class Grafo:
                  return True
         return False
 
+    def pecaVisitada(self,posx,posy,list): # ((nextX,nextY,nextvx,nextvy),(ax,ay),heuristica)
+        if len(list)==0: return False
+        for ((x,y,vx,vy),(ax,ay),h) in list:
+            if x==posx and y==posy:
+                return True
+        return False
+
+    def constroi(self,path):
+        lista = list()
+        for peca in path:
+            lista.append(peca.get_nome())
+        return (lista)
+
     #devolve lista de nodos adjacentes
     def devolveAdjs(self,x,y):
         peca = self.devolvePeca(x,y)
@@ -87,9 +99,50 @@ class Grafo:
         if not self.oriented and (node1.get_nome(),weight) not in self.grafo[node2.get_nome()] and not self.oriented:
             self.grafo[node2.get_nome()].append((node1.get_nome(), weight))
 
-    def GreedyAlgorithm(self):#calcular melhor caminho apos cada jogada
-       possiveisPosicoes=list()
-       possiveisPosicoes=Simulation.simulaPossiveisJogadas(self.car,self.mapSizeX,self.mapSizeY)#lista de possiveis estados
+    def GreedyAlgorithm(self,carro,visitados,path):#calcular melhor caminho apos cada jogada
+        start=datetime.now()
+        possiveisPosicoes=list()
+        posX_inicial=carro.get_posx()
+        posY_inicial=carro.get_posy()
+        possiveisPosicoes=Simulation.simulaPossiveisJogadas(carro,self.mapSizeX,self.mapSizeY)#lista de possiveis estados
+        fronteira = list()
+        for ((nextX,nextY,nextvx,nextvy),(ax,ay)) in possiveisPosicoes:
+            heuristica = self.calculaHeuristica_Manhataan(nextX,nextY)
+            if(self.pecaVisitada(nextX,nextY,visitados)==False):
+                 fronteira.append(((nextX,nextY,nextvx,nextvy),(ax,ay),heuristica))
+        fronteira.sort(key=lambda x:x[2])
+        escolhida=fronteira[0]
+        #atualizar valores do carro para a nova posicao
+        visitados.append(escolhida)
+        xAtual=escolhida[0][0]
+        yAtual=escolhida[0][1]
+        vxAtual=escolhida[0][2]
+        vyAtual=escolhida[0][3]
+        peca = self.devolvePeca(xAtual,yAtual)
+        carro.set_posx(xAtual)
+        carro.set_posy(yAtual)
+        carro.set_vx(vxAtual)
+        carro.set_vy(vyAtual)
+        path.append(peca)
+        if(peca.get_tipo().__eq__("WALL")):
+            carro.set_vx(0)
+            carro.set_vy(0)
+            carro.set_posx(posX_inicial)
+            carro.set_posy(posY_inicial)
+        if(peca.get_tipo().__eq__("META")):
+            custo=self.calcularCustoTotal(path)
+            time=datetime.now()-start
+            return (self.constroi(path),str("Custo=")+str(custo),time)
+        fronteira.clear()
+        possiveisPosicoes.clear()
+        res=self.GreedyAlgorithm(carro,visitados,path)
+        if res is not None:
+            return res
+        return (peca.get_nome(),path)
+
+
+
+
        #ir ao grafo à posicao em que o jogador está
        #colocar os filhos desse nodo na fronteira
        #dependendo do valor da heuristica para cada peça o jogador move-se para aquela peca que tiver menor valor de manhataan
@@ -169,25 +222,21 @@ class Grafo:
         return None
 
     def calcularCustoTotal(self, path):
-        test = path
         custo = 0
         i = 0
-        while (i+1 < len(test)):
+        while (i+1 < len(path)):
             if (path[i].get_tipo().__eq__("P")):
                 custo += 25
             else:
                 custo += 1
+            i+=1
         return custo
 
 
-
-
-    def calculaHeuristica_Manhataan(self,nodo):
-        x = nodo.get_x()
-        y = nodo.get_y()
+    def calculaHeuristica_Manhataan(self,posX,posY):
         min = list()
         for goal in self.devolveGoals():
-            dmanhattan = abs(x-goal.get_x())+abs(y-goal.get_y())
+            dmanhattan = abs(posX-goal.get_x())+abs(posY-goal.get_y())
             min.append((dmanhattan,goal))
         min.sort(key=lambda x: x[0])
         return min[0][0]
