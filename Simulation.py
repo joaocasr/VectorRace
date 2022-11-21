@@ -40,6 +40,20 @@ class Simulation:
             #print("\n")
             possiveisEstados.append(((nextX,nextY,nextvx,nextvy),(ax,ay)))
         return possiveisEstados
+    
+    def nextMove(pecaAntiga,c1,pecaFutura,c2,maze):
+        maze[c2[0]][c2[1]]='P'
+        maze[c1[0]][c1[1]]=pecaAntiga 
+        print(str("Coordenadas: (")+str(c2[0]+1)+str(",")+str(c2[1]+1)+str(")"))
+        return maze
+
+    def printMaze(maze):
+        eeline=""
+        for e in maze:
+            for ee in e:
+                eeline+=ee
+            print(eeline)
+            eeline=""
 
 
             

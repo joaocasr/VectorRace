@@ -59,7 +59,7 @@ class Grafo:
     def constroi(self,path):
         lista = list()
         for peca in path:
-            lista.append(peca.get_nome())
+            lista.append((peca.get_x(),peca.get_y()))
         return (lista)
 
     #devolve lista de nodos adjacentes
@@ -129,6 +129,8 @@ class Grafo:
             carro.set_vy(0)
             carro.set_posx(posX_inicial)
             carro.set_posy(posY_inicial)
+            pecaAnterior=self.devolvePeca(posX_inicial,posY_inicial)
+            path.append(pecaAnterior)
         if(peca.get_tipo().__eq__("META")):
             custo=self.calcularCustoTotal(path)
             time=datetime.now()-start
@@ -225,7 +227,7 @@ class Grafo:
         custo = 0
         i = 0
         while (i+1 < len(path)):
-            if (path[i].get_tipo().__eq__("P")):
+            if (path[i].get_tipo().__eq__("WALL")):
                 custo += 25
             else:
                 custo += 1
