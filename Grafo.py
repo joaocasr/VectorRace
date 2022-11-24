@@ -30,6 +30,12 @@ class Grafo:
                  return peca
         return None
 
+    def devolveAllPecas(self,list):
+        pecas=list()
+        for l in list:
+            pecas.append(l.get_nome())
+        return pecas
+
     #Usada em PrimeiraParede
     def devolveByNome(self,nome):
         for peca in self.nodos:
@@ -59,7 +65,8 @@ class Grafo:
     def constroi(self,path):
         lista = list()
         for peca in path:
-            lista.append((peca.get_x(),peca.get_y()))
+            if(peca!=None):
+                lista.append((peca.get_x(),peca.get_y()))
         return (lista)
 
     #devolve lista de nodos adjacentes
@@ -124,14 +131,14 @@ class Grafo:
         carro.set_vx(vxAtual)
         carro.set_vy(vyAtual)
         path.append(peca)
-        if(peca.get_tipo().__eq__("WALL")):
+        if(peca!=None and peca.get_tipo().__eq__("WALL")):
             carro.set_vx(0)
             carro.set_vy(0)
             carro.set_posx(posX_inicial)
             carro.set_posy(posY_inicial)
             pecaAnterior=self.devolvePeca(posX_inicial,posY_inicial)
             path.append(pecaAnterior)
-        if(peca.get_tipo().__eq__("META")):
+        if(peca!=None and peca.get_tipo().__eq__("META")):
             custo=self.calcularCustoTotal(path)
             time=datetime.now()-start
             return (self.constroi(path),str("Custo=")+str(custo),time)
@@ -227,7 +234,7 @@ class Grafo:
         custo = 0
         i = 0
         while (i+1 < len(path)):
-            if (path[i].get_tipo().__eq__("WALL")):
+            if(path[i]!=None and path[i].get_tipo().__eq__("WALL")):
                 custo += 25
             else:
                 custo += 1

@@ -31,7 +31,7 @@ class Player:
         self.velocX = vx
     
     def set_vy(self,vy):
-        self.x = vy
+        self.velocY = vy
     
 
 
