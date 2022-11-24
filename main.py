@@ -3,9 +3,15 @@ from Grafo import Grafo
 from Peca import Peca
 from Player import Player
 from Simulation import Simulation
+from pathlib import Path
 
 def main():
-    f = open("/home/joao/IA22-23/map5.txt","r")
+    ficheiro=input("Digite o nome do ficheiro do mapa:")
+    dir = Path(__file__).resolve().parent
+    directory = dir.as_posix()+str("/")+str(ficheiro)
+    print(directory)
+    #folder+=str(ficheiro)
+    f = open(directory,"r")
     l = list()
     circuito=list()
     rowCircuito=list()
@@ -88,6 +94,8 @@ def main():
         j+=1
     print(str("Percurso da Corrida: ")+str(caminho))
     print("Custo: "+str(custo)+str(" Tempo: ")+str(tempo))
+
+    #print(g.existeParedeNoCaminho(6,9,3,13))
     #for key in g.grafo.keys():
     #    print(str(key)+str("->"),end=' ')
     #    for (n,custo) in g.grafo[key]:

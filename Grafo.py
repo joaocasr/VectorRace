@@ -138,6 +138,20 @@ class Grafo:
             carro.set_posy(posY_inicial)
             pecaAnterior=self.devolvePeca(posX_inicial,posY_inicial)
             path.append(pecaAnterior)
+        if(peca.get_tipo().__eq__("NONE") and (self.existeParedeNoCaminho(posX_inicial,posY_inicial,xAtual,yAtual)[0]==True)):
+            carro.set_vx(0)
+            carro.set_vy(0)
+            path.pop()
+            percurso=self.existeParedeNoCaminho(posX_inicial,posY_inicial,xAtual,yAtual)[1]
+            p=self.devolvePrimeiraParede(percurso)
+            novaPeca=self.devolveByNome(p)
+            path.append(novaPeca)
+            carro.set_posx(novaPeca.get_x())
+            carro.set_posy(novaPeca.get_y())
+            carro.set_posx(posX_inicial)
+            carro.set_posy(posY_inicial)
+            pecaAnterior=self.devolvePeca(posX_inicial,posY_inicial)
+            path.append(pecaAnterior)
         if(peca!=None and peca.get_tipo().__eq__("META")):
             custo=self.calcularCustoTotal(path)
             time=datetime.now()-start
@@ -159,8 +173,9 @@ class Grafo:
        #verificar que tipo de peça é: se for vazia aumentar o custo +1 caso seja uma parede o jogador tem de fazer moveback e o custo aumenta 25
        #caso de paragem quando chegar a um dos goals F
        # fazer metodo de contagem total do custo
-       
-    def verificaCaminho(self,posix,posiy,posfx,posfy):
+       #quando o carro vai para uma dada posicao simulada pela sua aceleracao este irá pelo caminho mais curto do grafo dado pelo algoritmo bfs pelo que temos de verificar se o carro está a atravessar paredes
+
+    def existeParedeNoCaminho(self,posix,posiy,posfx,posfy):
         visited = set()
         fila = Queue()
 
@@ -184,51 +199,29 @@ class Grafo:
                 path_found = True
             else:
                 for (n, custo) in self.grafo[nodo_atual]:
-                    if n not in visited and not n.startswith('parede'):
+                    if n not in visited:
                         fila.put(n)
                         parent[n] = nodo_atual
                         visited.add(n)
-
-
+        path = []
         if path_found:
-            return(1)
-        else:
-            return(0)
+            path.append(end)
+            while parent[end] is not None:
+                path.append(parent[end])
+                end = parent[end]
+            path.reverse()
+            existe=False
+            for nodoAtual in path:
+                if "parede" in nodoAtual:
+                    existe=True
+        return (existe,path)
+
 
     
-    def devolvePrimeiraParede(self,posix,posiy,posfx,posfy):
-        visited = set()
-        fila = Queue()
-
-        start = self.devolveNome(posix, posiy)
-        end = self.devolveNome(posfx, posfy)
-
-        # adicionar o nodo inicial à fila e aos visitados
-        fila.put(start)
-        visited.add(start)
-
-        # garantir que o start node nao tem pais...
-        parent = dict()
-        parent[start] = None
-
-        path_found = False
-
-        while not fila.empty() and path_found == False:
-            nodo_atual = fila.get()
-            if nodo_atual == end:
-                path_found = True
-            else:
-                for (n, custo) in self.grafo[nodo_atual]:
-                    if n not in visited:
-                        if n.startswith('parede'):
-                            peca = self.devolveByNome(n)
-                            return (peca)
-                        else:
-                            fila.put(n)
-                            parent[n] = nodo_atual
-                            visited.add(n)
-
-        return None
+    def devolvePrimeiraParede(self,path):
+        for p in path:
+            if "parede" in p:
+                return p
 
     def calcularCustoTotal(self, path):
         custo = 0
