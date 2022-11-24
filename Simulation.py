@@ -47,9 +47,20 @@ class Simulation:
         print(str("Coordenadas: (")+str(c2[0]+1)+str(",")+str(c2[1]+1)+str(")"))
         return maze
 
-    def printMaze(maze):
+    def printMaze(maze1,maze2):
+        nl=len(maze1)
+        nc=len(maze1[0])
+        il=0
+        ic=0
+        while(il<nl):
+            while(ic<nc):
+                if maze2[il][ic]=='X' and maze1[il][ic]=='-':
+                    maze1[il][ic]='X'
+                ic+=1
+            ic=0
+            il+=1
         eeline=""
-        for e in maze:
+        for e in maze1:
             for ee in e:
                 eeline+=ee
             print(eeline)

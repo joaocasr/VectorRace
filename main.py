@@ -8,9 +8,8 @@ from pathlib import Path
 def main():
     ficheiro=input("Digite o nome do ficheiro do mapa:")
     dir = Path(__file__).resolve().parent
-    directory = dir.as_posix()+str("/")+str(ficheiro)
+    directory = dir.as_posix()+str("/maps/")+str(ficheiro)
     print(directory)
-    #folder+=str(ficheiro)
     f = open(directory,"r")
     l = list()
     circuito=list()
@@ -76,20 +75,33 @@ def main():
             eeline+=ee
         print(eeline)
         eeline=""
+    maze2=list()
+    mazeLine=list()
+    i=1
+    for elemento in circuito[0]:
+        mazeLine.append(elemento)
+        i+=1
+        if(i==coordY+1):
+            maze2.append(mazeLine)
+            i=1
+            mazeLine=list()
+    eeline=""
     pecaaAlterar= list()
     pecaaAlterar.append('-')
     for pecaCoord in caminho:
         pecaaAlterar.append(maze[pecaCoord[0]-1][pecaCoord[0]-1])
     #print(pecaaAlterar)
     print("Simulação Jogada nº 1")
-    Simulation.printMaze(Simulation.nextMove('-',(carroX-1,carroY-1),maze[caminho[0][0]-1][caminho[0][1]-1],(caminho[0][0]-1,caminho[0][1]-1),maze))
+    Simulation.printMaze(Simulation.nextMove('-',(carroX-1,carroY-1),maze[caminho[0][0]-1][caminho[0][1]-1],(caminho[0][0]-1,caminho[0][1]-1),maze),maze2)
     jogadas=len(caminho)
     j=1
     n=0
     w=False
     while(j!=jogadas):
-        print(str("Simulação Jogada nº ")+str(j+1))
-        Simulation.printMaze(Simulation.nextMove(pecaaAlterar[j],(caminho[n][0]-1,caminho[n][1]-1),pecaaAlterar[j+1],(caminho[n+1][0]-1,caminho[n+1][1]-1),maze))
+        print(str("*************************"))
+        print(str("Simulação da jogada nº ")+str(j+1))
+        # -,(x,y),-,(n,m)
+        Simulation.printMaze(Simulation.nextMove(pecaaAlterar[j],(caminho[n][0]-1,caminho[n][1]-1),pecaaAlterar[j+1],(caminho[n+1][0]-1,caminho[n+1][1]-1),maze),maze2)
         n+=1
         j+=1
     print(str("Percurso da Corrida: ")+str(caminho))
