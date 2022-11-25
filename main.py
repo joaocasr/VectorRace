@@ -89,7 +89,7 @@ def main():
     pecaaAlterar.append('-')
     for pecaCoord in caminho:
         pecaaAlterar.append(maze[pecaCoord[0]-1][pecaCoord[1]-1])
-    print("Simulação Jogada nº 1")
+    print("Simulação da Jogada nº 1")
     Simulation.printMaze(Simulation.nextMove('-',(carroX-1,carroY-1),maze[caminho[0][0]-1][caminho[0][1]-1],(caminho[0][0]-1,caminho[0][1]-1),maze),maze2)
     jogadas=len(caminho)
     j=1
