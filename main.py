@@ -34,7 +34,7 @@ def main():
                 p = Peca("meta("+str(countLine)+","+str(countColumn)+")",countLine,countColumn,"META")
                 rowCircuito.append('F')
             if(x=='P'):
-                p = Peca("vazio("+str(countLine)+","+str(countColumn)+")",countLine,countColumn,"None")
+                p = Peca("vazio("+str(countLine)+","+str(countColumn)+")",countLine,countColumn,"NONE")
                 player = Player("player1",countLine,countColumn,0,0)
                 rowCircuito.append('P')
             allPieces.append(p)
