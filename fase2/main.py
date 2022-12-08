@@ -19,7 +19,7 @@ def main():
         getOpcao = input("Digite a opção pretendida:")
         if(getOpcao=="5"): 
             break;
-
+        
         ficheiro=input("Digite o nome do ficheiro do mapa:")
         nomePlayer1=input("Player P:")
         print(nomePlayer1+"-> P")
@@ -102,8 +102,8 @@ def main():
             (caminho1,custo1,tempo1)=g.procuraBFS(player1)
             (caminho2,custo2,tempo2)=g.procuraBFS(player2)
         if(getOpcao=="3"):
-             print("Não implementado.")
-             break
+            (caminho1,custo1,tempo1)=g.aStar(player1)
+            (caminho2,custo2,tempo2)=g.aStar(player2)
         if(getOpcao=="4"): 
             (caminho1,custo1,tempo1)=g.GreedyAlgorithm(player1,vis1,path1)
             (caminho2,custo2,tempo2)=g.GreedyAlgorithm(player2,vis2,path2)
