@@ -163,7 +163,7 @@ class Grafo:
             return res
         return (peca.get_nome(),path)
 
-    def procuraDFS(self,carro, path=list(), visited=set()):
+    def procuraDFS(self,carro, path, visited):
         startTime=datetime.now()
         start= self.devolveNome(carro.get_posx(),carro.get_posy())
         path.append(self.devolvePeca(carro.get_posx(),carro.get_posy()))
@@ -174,7 +174,7 @@ class Grafo:
             return (self.constroi(path),custo,finalTime)
         for (adjacente,custo) in self.grafo[start]:
             if adjacente not in visited:
-                if("parede" in adjacente):
+                if("parede" in adjacente): #se for parede pop da posicao anterior pois o carro terá de voltar para trás
                     visited.pop()
                     path.append(self.devolveByNome(adjacente))
                     visited.add(adjacente)
