@@ -89,7 +89,15 @@ def main():
         carroX2=player2.get_posx()
         carroY2=player2.get_posy()
 
-        if(getOpcao=="1"): (caminho1,custo1,tempo1)=g.procuraDFS(player1)
+        if(getOpcao=="1"):
+            caminho1=list()
+            caminho2=list()
+            visit1=set()
+            visit2=set()
+            path1d=list()
+            path2d=list()
+            (caminho1,custo1,tempo1)=g.procuraDFS(player1,path1d,visit1)
+            (caminho2,custo2,tempo2)=g.procuraDFS(player2,path2d,visit2)
         if(getOpcao=="2"):
             print("Não implementado.")
             break
@@ -133,6 +141,7 @@ def main():
         inj=1
         res=2
         while(i1<j1 or i2<j2):
+            if(j1==0 or j2==0): break
             mazef=Simulation.nextMove((caminho1[i1-1][0]-1,caminho1[i1-1][1]-1),'P',(caminho2[i2-1][0]-1,caminho2[i2-1][1]-1),'J',maze)
             maze=mazef
             if(i1<j1): i1+=1
