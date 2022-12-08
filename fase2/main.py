@@ -99,8 +99,8 @@ def main():
             (caminho1,custo1,tempo1)=g.procuraDFS(player1,path1d,visit1)
             (caminho2,custo2,tempo2)=g.procuraDFS(player2,path2d,visit2)
         if(getOpcao=="2"):
-            print("Não implementado.")
-            break
+            (caminho1,custo1,tempo1)=g.procuraBFS(player1)
+            (caminho2,custo2,tempo2)=g.procuraBFS(player2)
         if(getOpcao=="3"):
              print("Não implementado.")
              break

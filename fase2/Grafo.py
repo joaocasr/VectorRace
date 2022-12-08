@@ -240,6 +240,45 @@ class Grafo:
         return (existe,path)
 
 
+    def procuraBFS(self,carro):
+        startTime=datetime.now()
+        start= self.devolveNome(carro.get_posx(),carro.get_posy())
+        visited = set()
+        fila = Queue()
+        # adicionar o nodo inicial à fila e aos visitados
+        fila.put(start)
+        visited.add(start)
+        # garantir que o start node nao tem pais
+        parent = dict()
+        parent[start] = None
+
+        path_found = False
+        while not fila.empty() and path_found == False:
+            nodo_atual = fila.get()
+            if "meta" in nodo_atual:
+                path_found = True
+            else:
+                for (n, custo) in self.grafo[nodo_atual]:
+                    if (n not in visited) and ("parede" not in n):
+                        fila.put(n)
+                        parent[n] = nodo_atual
+                        visited.add(n)
+        path = []
+        finalTime=datetime.now()-startTime
+        if path_found:
+            path.append(self.devolveByNome(nodo_atual))
+            while parent[nodo_atual] is not None:
+                path.append(self.devolveByNome(parent[nodo_atual]))
+                nodo_atual = parent[nodo_atual]
+            path.reverse()
+            custo = self.calcularCustoTotal(path)
+            a=path
+            b=1
+        return (self.constroi(path),custo,finalTime)
+
+
+
+
     
     def devolvePrimeiraParede(self,path):
         for p in path:
