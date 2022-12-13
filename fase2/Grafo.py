@@ -311,17 +311,19 @@ class Grafo:
                 return (self.constroi(path),custo,finalTime)
             for (m,weight) in self.get_neighbours(n): 
                 if m not in openList and m not in closedList:
-                    openList.add(m)
-                    parents[m] = n
-                    g[m] = g[n] + 1   
-                else:
-                    if g[m] > g[n] + 1:
-                        g[m] = g[n] + 1
+                    if "parede" not in m:
+                        openList.add(m)
                         parents[m] = n
+                        g[m] = g[n] + 1   
+                else:
+                    if "parede" not in m :
+                        if g[m] > g[n] + 1:
+                            g[m] = g[n] + 1
+                            parents[m] = n
 
-                        if m in closedList:
-                            closedList.remove(m)
-                            openList.add(m)
+                            if m in closedList:
+                                closedList.remove(m)
+                                openList.add(m)
             openList.remove(n)
             closedList.add(n)
         return None
