@@ -155,7 +155,7 @@ class Grafo:
         if(peca!=None and peca.get_tipo().__eq__("META")):
             custo=self.calcularCustoTotal(path)
             time=datetime.now()-start
-            return (self.constroi(path),str("Custo=")+str(custo),time)
+            return (self.constroi(path),custo,time)
         fronteira.clear()
         possiveisPosicoes.clear()
         res=self.GreedyAlgorithm(carro,visitados,path)
