@@ -47,8 +47,8 @@ class Simulation:
         if(maze[cxy2[0]][cxy2[1]]!='X'):
             maze[cxy2[0]][cxy2[1]]=jogador2
 
-        print(str("Coordenadas player 1: ")+str(cxy1))
-        print(str("Coordenadas player 2: ")+str(cxy2))
+        print(str("Coordenadas Player P: ")+str(cxy1))
+        print(str("Coordenadas Player J: ")+str(cxy2))
         return maze
 
     def printMaze(maze1):

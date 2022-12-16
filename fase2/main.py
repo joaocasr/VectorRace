@@ -80,8 +80,8 @@ def main():
         path1=list()
         vis2=list()
         path2=list()
-        print(str("posição inicial do carro: ")+str((player1.get_posx(),player1.get_posy())))
-        print(str("posição inicial do carro: ")+str((player2.get_posx(),player2.get_posy())))
+        print(str("posição inicial do Player P: ")+str((player1.get_posx(),player1.get_posy())))
+        print(str("posição inicial do Player J: ")+str((player2.get_posx(),player2.get_posy())))
 
         carroX1=player1.get_posx()
         carroY1=player1.get_posy()
@@ -149,9 +149,9 @@ def main():
             print("Simulação da Jogada nº "+str(inj))
             inj+=1
             Simulation.printMaze(mazef)
-        print(str("Percurso da Corrida piloto 1: ")+str(caminho1))
+        print(str("Percurso da Corrida Player P: ")+str(caminho1))
         print("Custo: "+str(custo1)+str(" Tempo: ")+str(tempo1))
-        print(str("Percurso da Corrida piloto 2: ")+str(caminho2))
+        print(str("Percurso da Corrida Player J: ")+str(caminho2))
         print("Custo: "+str(custo2)+str(" Tempo: ")+str(tempo2))
         vencedor=nomePlayer1
         if(tempo1>tempo2):
