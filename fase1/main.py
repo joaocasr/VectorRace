@@ -32,7 +32,6 @@ pygame.font.init()
 fontTXT = pygame.font.SysFont("arial", 20)
 
 pygame.init()
-pygame.display.set_caption("VECTOR RACE")
 screen= pygame.display.set_mode((750,500))
 
   
@@ -96,8 +95,8 @@ def play(algo):
     maze1=list()
     linha=list()
     x=y=0
-    carx=14#randrange(len(maze))
-    cary=3#randrange(len(maze[0]))
+    carx=randrange(len(maze))
+    cary=randrange(len(maze[0]))
     for l in maze:
             for c in l:
                 if(x==carx and y==cary):
