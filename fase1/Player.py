@@ -1,3 +1,5 @@
+import pygame
+
 class Player:
     def __init__(self,nome,x,y,vx,vy):
         self.nome = nome
@@ -5,6 +7,10 @@ class Player:
         self.y = y
         self.velocX = vx
         self.velocY = vy
+        self.rect = pygame.Rect(x,y,18,18)
+
+    def set_rect(self,x,y):
+        self.rect=pygame.Rect(x,y,18,18)
 
     def get_nome(self):
         return self.nome
@@ -14,7 +20,13 @@ class Player:
     
     def get_posy(self):
         return self.y
+
+    def get_x(self):
+        return self.x
     
+    def get_y(self):
+        return self.y
+
     def get_velocX(self):
         return self.velocX
 
@@ -32,6 +44,9 @@ class Player:
     
     def set_vy(self,vy):
         self.velocY = vy
+    
+    def get_tipo(self):
+        return "PLAYER"
     
 
 

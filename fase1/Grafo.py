@@ -55,6 +55,15 @@ class Grafo:
                  return True
         return False
 
+    def devolveIndice(self,x,y,list):
+        i=0
+        for p in list:
+            if(p.get_x()==x and p.get_y()==y):
+                return i
+            i+=1
+        return None
+
+
     def pecaVisitada(self,posx,posy,list): # ((nextX,nextY,nextvx,nextvy),(ax,ay),heuristica)
         if len(list)==0: return False
         for ((x,y,vx,vy),(ax,ay),h) in list:
@@ -163,7 +172,11 @@ class Grafo:
             return res
         return (peca.get_nome(),path)
 
-
+    def get_neighbours(self,node):
+        listNodes= list()
+        for (nome,custo) in self.grafo[node]:
+            listNodes.append((nome,custo))
+        return listNodes         
 
 
        #ir ao grafo à posicao em que o jogador está
@@ -222,6 +235,113 @@ class Grafo:
         for p in path:
             if "parede" in p:
                 return p
+
+    def procuraBFS(self,carro):
+        startTime=datetime.now()
+        start= self.devolveNome(carro.get_posx(),carro.get_posy())
+        visited = set()
+        fila = Queue()
+        # adicionar o nodo inicial à fila e aos visitados
+        fila.put(start)
+        visited.add(start)
+        # garantir que o start node nao tem pais
+        parent = dict()
+        parent[start] = None
+
+        path_found = False
+        while not fila.empty() and path_found == False:
+            nodo_atual = fila.get()
+            if "meta" in nodo_atual:
+                path_found = True
+            else:
+                for (n, custo) in self.grafo[nodo_atual]:
+                    if (n not in visited) and ("parede" not in n):
+                        fila.put(n)
+                        parent[n] = nodo_atual
+                        visited.add(n)
+        path = []
+        finalTime=datetime.now()-startTime
+        if path_found:
+            path.append(self.devolveByNome(nodo_atual))
+            while parent[nodo_atual] is not None:
+                path.append(self.devolveByNome(parent[nodo_atual]))
+                nodo_atual = parent[nodo_atual]
+            path.reverse()
+            custo = self.calcularCustoTotal(path)
+            a=path
+            b=1
+        return (self.constroi(path),custo,finalTime)
+
+
+    def procuraDFS(self,carro, path, visited):
+        startTime=datetime.now()
+        start= self.devolveNome(carro.get_posx(),carro.get_posy())
+        path.append(self.devolvePeca(carro.get_posx(),carro.get_posy()))
+        visited.add(start)
+        if "meta" in start:
+            custo = self.calcularCustoTotal(path)
+            finalTime=datetime.now()-startTime
+            return (self.constroi(path),custo,finalTime)
+        for (adjacente,custo) in self.grafo[start]:
+            if adjacente not in visited:
+                if("parede" in adjacente): #se for parede pop da posicao anterior pois o carro terá de voltar para trás
+                    visited.pop()
+                    path.append(self.devolveByNome(adjacente))
+                    visited.add(adjacente)
+                else:
+                    peca = self.devolveByNome(adjacente)
+                    carro.set_posx(peca.get_x())
+                    carro.set_posy(peca.get_y())
+                resultado = self.procuraDFS(carro,path,visited)
+                if resultado is not None:
+                    return resultado
+        path.pop()
+        return None    
+
+    def aStar(self,carro):
+        startTime=datetime.now()
+        startNode = self.devolveNome(carro.get_posx(),carro.get_posy())
+        openList=set([startNode])
+        closedList = set([])
+        g={}
+        g[startNode]=1
+        parents={}
+        parents[startNode] = startNode
+        while len(openList)>0:
+            n = None
+            for v in openList:
+                if n == None or g[v] + self.calculaHeuristica_Manhataan(self.devolveByNome(v).get_x(),self.devolveByNome(v).get_y()) < g[n] + self.calculaHeuristica_Manhataan(self.devolveByNome(n).get_x(),self.devolveByNome(n).get_y()):
+                    n=v
+            if "meta" in n:
+                finalTime=datetime.now()-startTime
+                path=list()
+                pecas=list()
+                while parents[n] != n:
+                    #path.append(n)
+                    path.append(self.devolveByNome(n))
+                    n = parents[n]
+                path.append(self.devolveByNome(startNode))
+                path.reverse()
+                custo = self.calcularCustoTotal(path)
+                return (self.constroi(path),custo,finalTime)
+            for (m,weight) in self.get_neighbours(n): 
+                if m not in openList and m not in closedList:
+                    if "parede" not in m:
+                        openList.add(m)
+                        parents[m] = n
+                        g[m] = g[n] + 1   
+                else:
+                    if "parede" not in m :
+                        if g[m] > g[n] + 1:
+                            g[m] = g[n] + 1
+                            parents[m] = n
+
+                            if m in closedList:
+                                closedList.remove(m)
+                                openList.add(m)
+            openList.remove(n)
+            closedList.add(n)
+        return None
 
     def calcularCustoTotal(self, path):
         custo = 0
